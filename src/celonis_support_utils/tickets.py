@@ -1,0 +1,2 @@
+class Tickets:
+    pass
