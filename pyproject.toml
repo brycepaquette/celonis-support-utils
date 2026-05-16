@@ -6,7 +6,7 @@ readme = "README.md"
 authors = [
     { name = "b-paquette", email = "b.paquette@celonis.com" }
 ]
-requires-python = ">=3.10.3"
+requires-python = ">=3.12"
 dependencies = []
 
 [build-system]
