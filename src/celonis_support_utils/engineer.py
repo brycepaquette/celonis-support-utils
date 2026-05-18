@@ -20,5 +20,11 @@ class Engineer:
                 f"Invalid region: {exc}. Must be one of {valid_regions}"
             ) from exc
 
-    def is_on_shift(self, shift: Shift) -> bool:
-        return shift.is_active()
+    def is_on_shift(self, assigned_shift: Shift | None) -> bool:
+        """
+        Returns True if the engineer is currently on shift.
+        Returns False if no shift is assigned for today or if the shift is not active.
+        """
+        if assigned_shift is None:
+            return False
+        return assigned_shift.is_active()
