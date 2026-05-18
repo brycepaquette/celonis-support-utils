@@ -29,3 +29,10 @@ class StandardRouting:
                 if engineer.is_on_shift(assigned_shift):
                     return engineer
         return None
+
+
+class EscalationRouting:
+    """TODO: Implement escalation routing logic."""
+
+    def route(self, ticket: Ticket, teams: list[Team]) -> Engineer | None:
+        raise NotImplementedError
