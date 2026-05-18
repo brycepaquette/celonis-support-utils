@@ -26,7 +26,8 @@ class Ticket:
         self.title = title
         self.description = description
 
-    def _parse_issue_type(self, value: str) -> IssueType:
+    @staticmethod
+    def _parse_issue_type(value: str) -> IssueType:
         try:
             return IssueType[value.strip().upper().replace(" ", "_")]
         except KeyError as exc:
