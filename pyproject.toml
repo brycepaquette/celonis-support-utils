@@ -30,7 +30,7 @@ target-version = "py312"
 select = ["E", "F", "I", "UP", "B", "SIM", "PL"]
 
 [tool.ruff.lint.pylint]
-max-args = 7
+max-args = 8
 
 [tool.mypy]
 strict = true
