@@ -4,11 +4,10 @@ from .enums import Region
 
 
 class Engineer:
-    def __init__(self, id: int, name: str, region: str, level: str):
+    def __init__(self, id: int, name: str, region: str):
         self.id = id
         self.name = name
         self.region = self._parse_region(region)
-        self.level = level
 
     @staticmethod
     def _parse_region(value: str) -> Region:
