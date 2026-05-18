@@ -1,2 +1,0 @@
-class RoutingRule:
-    pass

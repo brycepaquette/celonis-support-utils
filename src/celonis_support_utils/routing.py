@@ -1,0 +1,2 @@
+class RoutingStrategy:
+    pass
