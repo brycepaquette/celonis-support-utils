@@ -3,6 +3,8 @@ from celonis_support_utils.ticket import Ticket
 
 class Queue:
     def __init__(self, name: str):
+        if not name:
+            raise ValueError("Queue name cannot be empty.")
         self.name = name
         self._queue: list[Ticket] = []
 
