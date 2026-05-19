@@ -1,19 +1,15 @@
 import pytest
+
 from celonis_support_utils.engineer import Engineer
 
 
-@pytest.fixture
-def sample_engineer_data():
-    return {"engineer_id": "1", "name": "Alice", "region": "US"}
-
-
-def test_engineer_id_non_empty(sample_engineer_data):
+def test_engineer_id_empty(sample_engineer_data):
     sample_engineer_data["engineer_id"] = ""
     with pytest.raises(ValueError, match="id cannot be empty"):
         Engineer(**sample_engineer_data)
 
 
-def test_name_non_empty(sample_engineer_data):
+def test_name_empty(sample_engineer_data):
     sample_engineer_data["name"] = ""
     with pytest.raises(ValueError, match="name cannot be empty"):
         Engineer(**sample_engineer_data)

@@ -1,4 +1,5 @@
 import pytest
+
 from celonis_support_utils.ticket import Ticket
 
 

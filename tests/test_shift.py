@@ -1,6 +1,7 @@
 from datetime import datetime
 
 import pytest
+
 from celonis_support_utils.shift import Shift
 
 

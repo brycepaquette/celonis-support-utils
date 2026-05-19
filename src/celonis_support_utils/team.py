@@ -4,7 +4,9 @@ from .enums import Region
 
 class Team:
     def __init__(self, name: str, region: str, engineers: list[Engineer]):
-        self.name = name
+        if not engineers:
+            raise ValueError("Team must have at least one engineer")
+        self.name = self._require_non_empty(name, "name")
         self.region = self._parse_region(region)
         self.engineers = engineers
 
@@ -17,3 +19,9 @@ class Team:
             raise ValueError(
                 f"Invalid region: {exc}. Must be one of {valid_regions}"
             ) from exc
+
+    @staticmethod
+    def _require_non_empty(value: str, field_name: str) -> str:
+        if not value.strip():
+            raise ValueError(f"{field_name} cannot be empty")
+        return value.strip()
