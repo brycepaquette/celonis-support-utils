@@ -4,9 +4,9 @@ from .enums import Region
 
 
 class Engineer:
-    def __init__(self, id: int, name: str, region: str):
-        self.id = id
-        self.name = name
+    def __init__(self, engineer_id: str, name: str, region: str):
+        self.engineer_id = self._require_non_empty(engineer_id, "id")
+        self.name = self._require_non_empty(name, "name")
         self.region = self._parse_region(region)
 
     @staticmethod
@@ -18,6 +18,11 @@ class Engineer:
             raise ValueError(
                 f"Invalid region: {exc}. Must be one of {valid_regions}"
             ) from exc
+
+    def _require_non_empty(self, value: str, field_name: str) -> str:
+        if not value.strip():
+            raise ValueError(f"{field_name} cannot be empty")
+        return value.strip()
 
     def is_on_shift(self, assigned_shift: Shift | None) -> bool:
         """
