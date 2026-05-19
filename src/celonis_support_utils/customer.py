@@ -1,19 +1,11 @@
-from enum import Enum
-
-
-class ServiceLevel(Enum):
-    STANDARD = "Standard"
-    PREMIUM = "Premium"
-    PREMIER = "Premier"
-    PREMIER_PLUS = "Premier Plus"
-    MAXSUCCESS = "MaxSuccess"
+from celonis_support_utils.enums import ServiceLevel
 
 
 class Customer:
     def __init__(self, company_name: str, service_level: str):
-        self.company_name = company_name
         if not company_name.strip():
             raise ValueError("company_name cannot be empty")
+        self.company_name = company_name
         self.service_level = self._parse_service_level(service_level)
 
     @staticmethod

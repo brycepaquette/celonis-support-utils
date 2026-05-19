@@ -20,3 +20,11 @@ class Region(Enum):
     EU = "eu"
     APAC = "apac"
     GLOBAL = "global"
+
+
+class ServiceLevel(Enum):
+    STANDARD = "Standard"
+    PREMIUM = "Premium"
+    PREMIER = "Premier"
+    PREMIER_PLUS = "Premier Plus"
+    MAXSUCCESS = "MaxSuccess"

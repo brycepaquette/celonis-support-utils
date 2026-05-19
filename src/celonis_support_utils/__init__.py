@@ -1,6 +1,6 @@
-from .customer import Customer, ServiceLevel
+from .customer import Customer
 from .engineer import Engineer
-from .enums import DayOfWeek, Region
+from .enums import DayOfWeek, Region, ServiceLevel
 from .queue import Queue
 from .routing import EscalationRouting, RoutingStrategy, StandardRouting
 from .shift import Shift
