@@ -23,6 +23,8 @@ class Region(Enum):
 
 
 class ServiceLevel(Enum):
+    """Enum for service levels."""
+
     STANDARD = "Standard"
     PREMIUM = "Premium"
     PREMIER = "Premier"
