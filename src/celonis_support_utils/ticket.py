@@ -1,6 +1,6 @@
 from enum import Enum
 
-from celonis_support_utils.enums import Region
+from celonis_support_utils.enums import Region, ServiceLevel
 
 
 class IssueType(Enum):
@@ -20,22 +20,24 @@ class Ticket:
         title: str,
         description: str,
         restriction: str,
+        service_level: str,
     ):
-        self.ticket_id = ticket_id
+        self.ticket_id = self._require_non_empty(ticket_id, "ticket_id")
         self.issue_type = self._parse_issue_type(issue_type)
-        self.severity = severity
+        self.severity = self._require_non_empty(severity, "severity")
         self.service = service
         self.product_area = product_area
         self.title = title
         self.description = description
         self.restriction = self._parse_restriction(restriction)
+        self.service_level = self._parse_service_level(service_level)
 
     @staticmethod
     def _parse_issue_type(value: str) -> IssueType:
         try:
             return IssueType[value.strip().upper().replace(" ", "_")]
         except KeyError as exc:
-            valid_types = [t.name for t in IssueType]
+            valid_types = [issue_type.name for issue_type in IssueType]
             raise ValueError(
                 f"Invalid issue type: {exc}. Must be one of {valid_types}"
             ) from exc
@@ -45,7 +47,23 @@ class Ticket:
         try:
             return Region[value.strip().upper()]
         except KeyError as exc:
-            valid_regions = [r.name for r in Region]
+            valid_regions = [region.name for region in Region]
             raise ValueError(
                 f"Invalid restriction: {exc}. Must be one of {valid_regions}"
             ) from exc
+
+    @staticmethod
+    def _parse_service_level(value: str) -> ServiceLevel:
+        try:
+            return ServiceLevel[value.strip().upper().replace(" ", "_")]
+        except KeyError as exc:
+            valid_levels = [level.name for level in ServiceLevel]
+            raise ValueError(
+                f"Invalid service level: {exc}. Must be one of {valid_levels}"
+            ) from exc
+
+    @staticmethod
+    def _require_non_empty(value: str, field_name: str) -> str:
+        if not value.strip():
+            raise ValueError(f"{field_name} cannot be empty")
+        return value.strip()
