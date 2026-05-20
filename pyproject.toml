@@ -7,7 +7,10 @@ authors = [
     { name = "b-paquette", email = "b.paquette@celonis.com" }
 ]
 requires-python = ">=3.12"
-dependencies = []
+dependencies = [
+    "requests>=2.34.2",
+    "types-requests>=2.33.0.20260518",
+]
 
 [build-system]
 requires = ["uv_build>=0.11.14,<0.12.0"]
@@ -21,6 +24,7 @@ dev = [
     "pytest-cov>=7.1.0",
     "pytest-mock>=3.15.1",
     "ruff>=0.15.13",
+    "types-requests>=2.33.0.20260518",
 ]
 
 [tool.ruff]
