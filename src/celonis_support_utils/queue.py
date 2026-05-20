@@ -15,3 +15,9 @@ class Queue:
         if not self._queue:
             return None
         return self._queue.pop(0)
+
+    def __len__(self) -> int:
+        return len(self._queue)
+
+    def __bool__(self) -> bool:
+        return bool(self._queue)
