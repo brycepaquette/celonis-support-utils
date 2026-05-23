@@ -81,7 +81,7 @@ class Ticket:
         return value.strip()
 
     @classmethod
-    def from_salesforce(cls, payload: SalesforceTicketPayload) -> "Ticket":
+    def from_salesforce_payload(cls, payload: SalesforceTicketPayload) -> "Ticket":
         return cls(
             ticket_id=payload["ticket_id"],
             issue_type=payload["issue_type"],

@@ -1,5 +1,7 @@
 import pytest
 
+from celonis_support_utils.payloads import SalesforceTicketPayload
+
 
 @pytest.fixture
 def sample_engineer_data():
@@ -7,15 +9,15 @@ def sample_engineer_data():
 
 
 @pytest.fixture
-def sample_ticket_data():
-    return {
-        "ticket_id": "TICKET-123",
-        "issue_type": "Incident",
-        "severity": "SEV1",
-        "service": "Data Integration",
-        "product_area": "Connectors",
-        "title": "Data Connector Failure",
-        "description": "The data connector is failing to sync.",
-        "restriction": "EU",
-        "service_level": "STANDARD",
-    }
+def sample_salesforce_payload():
+    return SalesforceTicketPayload(
+        ticket_id="123",
+        issue_type="Incident",
+        severity="SEV1",
+        service="AI / Machine Learning",
+        product_area="PyCelonis",
+        title="PyCelonis Failure",
+        description="PyCelonis is failing to sync.",
+        restriction="GLOBAL",
+        service_level="STANDARD",
+    )
