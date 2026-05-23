@@ -8,6 +8,13 @@ from .ticket import Ticket
 
 
 class RoutingStrategy(Protocol):
+    """
+    Protocol chosen over ABC: routing implementations should not need to import
+    from this codebase — any class with a matching route() signature qualifies
+    automatically. This allows third-party or external routing strategies to
+    plug in without inheritance.
+    """
+
     def route(self, ticket: Ticket, teams: list[Team]) -> Engineer | None:
         """
         Determines which engineer should be assigned to the given ticket based
@@ -24,9 +31,7 @@ class StandardRouting:
         ]
         for team in eligible_teams:
             for engineer in team.engineers:
-                # TODO: Implement shift assignment logic here.
-                assigned_shift = None
-                if engineer.is_on_shift(assigned_shift):
+                if engineer.is_on_shift():
                     return engineer
         return None
 

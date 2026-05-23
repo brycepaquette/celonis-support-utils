@@ -4,10 +4,13 @@ from .enums import Region
 
 
 class Engineer:
-    def __init__(self, engineer_id: str, name: str, region: str):
+    def __init__(
+        self, engineer_id: str, name: str, region: str, shift: Shift | None = None
+    ):
         self.engineer_id = self._require_non_empty(engineer_id, "id")
         self.name = self._require_non_empty(name, "name")
         self.region = self._parse_region(region)
+        self.shift = shift
 
     @staticmethod
     def _parse_region(value: str) -> Region:
@@ -24,11 +27,11 @@ class Engineer:
             raise ValueError(f"{field_name} cannot be empty")
         return value.strip()
 
-    def is_on_shift(self, assigned_shift: Shift | None) -> bool:
+    def is_on_shift(self) -> bool:
         """
         Returns True if the engineer is currently on shift.
         Returns False if no shift is assigned for today or if the shift is not active.
         """
-        if assigned_shift is None:
+        if self.shift is None:
             return False
-        return assigned_shift.is_active()
+        return self.shift.is_active()
