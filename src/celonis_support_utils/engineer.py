@@ -4,6 +4,8 @@ from .enums import Region
 
 
 class Engineer:
+    """Class representing a support engineer."""
+
     def __init__(
         self, engineer_id: str, name: str, region: str, shift: Shift | None = None
     ):
@@ -22,7 +24,8 @@ class Engineer:
                 f"Invalid region: {exc}. Must be one of {valid_regions}"
             ) from exc
 
-    def _require_non_empty(self, value: str, field_name: str) -> str:
+    @staticmethod
+    def _require_non_empty(value: str, field_name: str) -> str:
         if not value.strip():
             raise ValueError(f"{field_name} cannot be empty")
         return value.strip()
