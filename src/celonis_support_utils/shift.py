@@ -7,13 +7,16 @@ from .enums import DayOfWeek
 
 @dataclass(frozen=True)
 class Shift:
-    id: str
+    """Represents a work shift with specific active days and times."""
+
+    shift_id: str
     start_time: time
     end_time: time
     timezone: ZoneInfo
     active_days: tuple[DayOfWeek, ...]
 
     def is_active(self, now: datetime | None = None) -> bool:
+        """Checks if the shift is currently active based on the current time and day."""
         if now is None:
             now = datetime.now(self.timezone)
         elif now.tzinfo is not None:
@@ -33,14 +36,15 @@ class Shift:
     @classmethod
     def from_raw(
         cls,
-        id: str,
+        shift_id: str,
         start_time: str,
         end_time: str,
         timezone: str,
         active_days: list[str],
     ) -> "Shift":
+        """Creates a Shift instance from raw string inputs."""
         return cls(
-            id=id,
+            shift_id=shift_id,
             start_time=cls._parse_time(start_time),
             end_time=cls._parse_time(end_time),
             timezone=cls._parse_timezone(timezone),
