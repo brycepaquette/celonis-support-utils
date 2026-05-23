@@ -1,17 +1,14 @@
-from celonis_support_utils.ticket import Ticket
-
-
-class Queue:
+class Queue[T]:
     def __init__(self, name: str):
         if not name:
             raise ValueError("Queue name cannot be empty.")
         self.name = name
-        self._queue: list[Ticket] = []
+        self._queue: list[T] = []
 
-    def add(self, ticket: Ticket) -> None:
-        self._queue.append(ticket)
+    def add(self, item: T) -> None:
+        self._queue.append(item)
 
-    def next(self) -> Ticket | None:
+    def next(self) -> T | None:
         if not self._queue:
             return None
         return self._queue.pop(0)
