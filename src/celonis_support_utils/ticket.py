@@ -26,12 +26,23 @@ class Ticket:
         self.ticket_id = self._require_non_empty(ticket_id, "ticket_id")
         self.issue_type = self._parse_issue_type(issue_type)
         self.severity = self._require_non_empty(severity, "severity")
-        self.service = service
-        self.product_area = product_area
-        self.title = title
-        self.description = description
+        self.service = self._require_non_empty(service, "service")
+        self.product_area = self._require_non_empty(product_area, "product_area")
+        self.title = self._require_non_empty(title, "title")
+        self.description = self._require_non_empty(description, "description")
         self.restriction = self._parse_restriction(restriction)
         self.service_level = self._parse_service_level(service_level)
+
+    def __repr__(self) -> str:
+        return f"Ticket(ticket_id={self.ticket_id!r}, issue_type={self.issue_type!r})"
+
+    def __eq__(self, other: object) -> bool:
+        if not isinstance(other, Ticket):
+            return NotImplemented
+        return self.ticket_id == other.ticket_id
+
+    def __hash__(self) -> int:
+        return hash(self.ticket_id)
 
     @staticmethod
     def _parse_issue_type(value: str) -> IssueType:
