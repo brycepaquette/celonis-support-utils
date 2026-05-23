@@ -53,3 +53,23 @@ def test_from_salesforce_payload_valid(sample_salesforce_payload):
     assert ticket.service_level.name == sample_salesforce_payload[
         "service_level"
     ].upper().replace(" ", "_")
+
+
+def test_ticket_equality(sample_salesforce_payload):
+    ticket1 = Ticket.from_salesforce_payload(sample_salesforce_payload)
+    ticket2 = Ticket.from_salesforce_payload(sample_salesforce_payload)
+    assert ticket1 == ticket2
+
+
+def test_ticket_inequality(sample_salesforce_payload):
+    ticket1 = Ticket.from_salesforce_payload(sample_salesforce_payload)
+    modified_payload = sample_salesforce_payload.copy()
+    modified_payload["ticket_id"] = "TICKET-9999"
+    ticket2 = Ticket.from_salesforce_payload(modified_payload)
+    assert ticket1 != ticket2
+
+
+def test_hashable(sample_salesforce_payload):
+    ticket = Ticket.from_salesforce_payload(sample_salesforce_payload)
+    ticket_set = {ticket}
+    assert ticket in ticket_set
