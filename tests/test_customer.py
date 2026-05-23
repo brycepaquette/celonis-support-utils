@@ -32,5 +32,5 @@ def test_service_level_with_spaces(sample_salesforce_customer_payload):
 
 def test_customer_name_empty():
     with pytest.raises(ValueError) as exc_info:
-        Customer(company_name="", service_level="Standard")
+        Customer(company_name="", service_level=ServiceLevel.STANDARD)
     assert "company_name cannot be empty" in str(exc_info.value)

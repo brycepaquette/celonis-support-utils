@@ -1,8 +1,11 @@
-from enum import Enum
+from enum import Enum, auto
 
 
 class DayOfWeek(Enum):
-    """Enum for days of the week."""
+    """Enum for days of the week.
+    Note: abbreviated names (MO, TUE, WED) are legacy — do not rename,
+    external scripts depend on these values.
+    """
 
     MO = 0
     TUE = 1
@@ -16,10 +19,10 @@ class DayOfWeek(Enum):
 class Region(Enum):
     """Enum for regions."""
 
-    US = "us"
-    EU = "eu"
-    APAC = "apac"
-    GLOBAL = "global"
+    US = auto()
+    EU = auto()
+    APAC = auto()
+    GLOBAL = auto()
 
 
 class ServiceLevel(Enum):
@@ -29,4 +32,4 @@ class ServiceLevel(Enum):
     PREMIUM = "Premium"
     PREMIER = "Premier"
     PREMIER_PLUS = "Premier Plus"
-    MAXSUCCESS = "MaxSuccess"
+    MAX_SUCCESS = "Max Success"
