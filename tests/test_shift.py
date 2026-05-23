@@ -7,7 +7,7 @@ from celonis_support_utils.shift import Shift
 
 @pytest.fixture
 def daytime_shift():
-    return Shift(
+    return Shift.from_raw(
         id="US-East-1",
         start_time="09:00",
         end_time="18:00",
@@ -18,7 +18,7 @@ def daytime_shift():
 
 @pytest.fixture
 def overnight_shift():
-    return Shift(
+    return Shift.from_raw(
         id="US-East-Overnight",
         start_time="22:00",
         end_time="07:00",
