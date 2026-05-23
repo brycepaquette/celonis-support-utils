@@ -37,7 +37,10 @@ class StandardRouting:
 
 
 class EscalationRouting:
-    """TODO: Implement escalation routing logic."""
+    """
+    Escalation routing: finds the most senior engineer regardless of shift.
+    TODO: Requires Engineer seniority levels (L1/L2) and product area matching.
+    """
 
     def route(self, ticket: Ticket, teams: list[Team]) -> Engineer | None:
         raise NotImplementedError
