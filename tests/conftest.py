@@ -1,6 +1,9 @@
 import pytest
 
-from celonis_support_utils.payloads import SalesforceTicketPayload
+from celonis_support_utils.payloads import (
+    SalesforceCustomerPayload,
+    SalesforceTicketPayload,
+)
 
 
 @pytest.fixture
@@ -21,3 +24,8 @@ def sample_salesforce_payload():
         restriction="GLOBAL",
         service_level="STANDARD",
     )
+
+
+@pytest.fixture
+def sample_salesforce_customer_payload():
+    return SalesforceCustomerPayload(company_name="Acme Corp", service_level="Premium")
