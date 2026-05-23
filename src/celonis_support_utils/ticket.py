@@ -119,6 +119,9 @@ class Ticket:
 
     @classmethod
     def from_salesforce_payload(cls, payload: SalesforceTicketPayload) -> "Ticket":
+        if payload["issue_type"] == "Incident" and not payload["severity"]:
+            raise ValueError("Severity is required for Incident tickets")
+
         return cls(
             ticket_id=payload["ticket_id"],
             issue_type=payload["issue_type"],
