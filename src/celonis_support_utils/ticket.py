@@ -1,6 +1,7 @@
 from enum import Enum
 
 from celonis_support_utils.enums import Region, ServiceLevel
+from celonis_support_utils.payloads import SalesforceTicketPayload
 
 
 class IssueType(Enum):
@@ -67,3 +68,17 @@ class Ticket:
         if not value.strip():
             raise ValueError(f"{field_name} cannot be empty")
         return value.strip()
+
+    @classmethod
+    def from_salesforce(cls, payload: SalesforceTicketPayload) -> "Ticket":
+        return cls(
+            ticket_id=payload["ticket_id"],
+            issue_type=payload["issue_type"],
+            severity=payload["severity"],
+            service=payload["service"],
+            product_area=payload["product_area"],
+            title=payload["title"],
+            description=payload["description"],
+            restriction=payload["restriction"],
+            service_level=payload["service_level"],
+        )
