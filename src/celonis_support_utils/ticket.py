@@ -50,12 +50,25 @@ class Ticket:
         self.region = parse_region(region)
         self.service_level = self._parse_service_level(service_level)
 
+    def __repr__(self) -> str:
+        return f"Ticket(ticket_id={self.ticket_id!r}, issue_type={self.issue_type!r})"
+
+    def __eq__(self, other: object) -> bool:
+        if not isinstance(other, Ticket):
+            return NotImplemented
+        return self.ticket_id == other.ticket_id
+
+    def __hash__(self) -> int:
+        return hash(self.ticket_id)
+
     @property
     def severity(self) -> Severity:
+        """Gets the current severity of the ticket."""
         return self._severity
 
     @severity.setter
     def severity(self, new_severity: Severity) -> None:
+        """Sets a new severity for the ticket and triggers callbacks if it changes."""
         if self._severity == new_severity:
             return
         old_severity = self._severity
@@ -69,16 +82,23 @@ class Ticket:
         """Registers a callback to be called when the severity changes."""
         self._severity_callbacks.append(callback)
 
-    def __repr__(self) -> str:
-        return f"Ticket(ticket_id={self.ticket_id!r}, issue_type={self.issue_type!r})"
+    @classmethod
+    def from_salesforce_payload(cls, payload: SalesforceTicketPayload) -> "Ticket":
+        """Creates a Ticket instance from a SalesforceTicketPayload."""
+        if payload["issue_type"] == "Incident" and not payload["severity"]:
+            raise ValueError("Severity is required for Incident tickets")
 
-    def __eq__(self, other: object) -> bool:
-        if not isinstance(other, Ticket):
-            return NotImplemented
-        return self.ticket_id == other.ticket_id
-
-    def __hash__(self) -> int:
-        return hash(self.ticket_id)
+        return cls(
+            ticket_id=payload["ticket_id"],
+            issue_type=payload["issue_type"],
+            severity=payload["severity"],
+            service=payload["service"],
+            product_area=payload["product_area"],
+            title=payload["title"],
+            description=payload["description"],
+            region=payload["region"],
+            service_level=payload["service_level"],
+        )
 
     @staticmethod
     def _parse_issue_type(value: str) -> IssueType:
@@ -109,21 +129,3 @@ class Ticket:
             raise ValueError(
                 f"Invalid severity: {exc}. Must be one of {valid_severities}"
             ) from exc
-
-    @classmethod
-    def from_salesforce_payload(cls, payload: SalesforceTicketPayload) -> "Ticket":
-        """Creates a Ticket instance from a SalesforceTicketPayload."""
-        if payload["issue_type"] == "Incident" and not payload["severity"]:
-            raise ValueError("Severity is required for Incident tickets")
-
-        return cls(
-            ticket_id=payload["ticket_id"],
-            issue_type=payload["issue_type"],
-            severity=payload["severity"],
-            service=payload["service"],
-            product_area=payload["product_area"],
-            title=payload["title"],
-            description=payload["description"],
-            region=payload["region"],
-            service_level=payload["service_level"],
-        )
