@@ -25,7 +25,10 @@ class RoutingStrategy(Protocol):
 
 
 class StandardRouting:
+    """Standard routing strategy."""
+
     def route(self, ticket: Ticket, teams: list[Team]) -> Engineer | None:
+        """Finds the first available on-shift engineer matching the ticket's region."""
         eligible_teams = [
             team for team in teams if ticket.restriction in (Region.GLOBAL, team.region)
         ]
