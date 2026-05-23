@@ -1,3 +1,4 @@
+from collections.abc import Callable
 from enum import Enum, auto
 
 from celonis_support_utils.enums import Region, ServiceLevel
@@ -30,15 +31,32 @@ class Ticket:
         restriction: str,
         service_level: str,
     ):
+        self._severity_callbacks: list[Callable[[Severity, Severity], None]] = []
         self.ticket_id = self._require_non_empty(ticket_id, "ticket_id")
         self.issue_type = self._parse_issue_type(issue_type)
-        self.severity = self._parse_severity(severity)
+        self._severity = self._parse_severity(severity)
         self.service = self._require_non_empty(service, "service")
         self.product_area = self._require_non_empty(product_area, "product_area")
         self.title = self._require_non_empty(title, "title")
         self.description = self._require_non_empty(description, "description")
         self.restriction = self._parse_restriction(restriction)
         self.service_level = self._parse_service_level(service_level)
+
+    @property
+    def severity(self) -> Severity:
+        return self._severity
+
+    @severity.setter
+    def severity(self, new_severity: Severity) -> None:
+        old_severity = self._severity
+        self._severity = new_severity
+        for callback in self._severity_callbacks:
+            callback(old_severity, new_severity)
+
+    def on_severity_change(
+        self, callback: Callable[[Severity, Severity], None]
+    ) -> None:
+        self._severity_callbacks.append(callback)
 
     def __repr__(self) -> str:
         return f"Ticket(ticket_id={self.ticket_id!r}, issue_type={self.issue_type!r})"

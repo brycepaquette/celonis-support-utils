@@ -1,6 +1,6 @@
 import pytest
 
-from celonis_support_utils.ticket import Ticket
+from celonis_support_utils.ticket import Severity, Ticket
 
 
 def test_ticket_id_empty(sample_salesforce_payload):
@@ -75,3 +75,16 @@ def test_hashable(sample_salesforce_payload):
     ticket = Ticket.from_salesforce_payload(sample_salesforce_payload)
     ticket_set = {ticket}
     assert ticket in ticket_set
+
+
+def test_severity_change_fires_callback(sample_salesforce_payload):
+    ticket = Ticket.from_salesforce_payload(sample_salesforce_payload)
+    calls = []
+
+    def callback(old, new):
+        calls.append((old, new))
+
+    ticket.on_severity_change(callback)
+    ticket.severity = Severity.SEV2
+    assert len(calls) == 1
+    assert calls[0] == (Severity.SEV1, Severity.SEV2)
