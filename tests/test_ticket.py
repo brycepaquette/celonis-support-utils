@@ -10,13 +10,6 @@ def test_ticket_id_empty(sample_salesforce_payload):
     assert "ticket_id cannot be empty" in str(exc_info.value)
 
 
-def test_severity_empty(sample_salesforce_payload):
-    sample_salesforce_payload["severity"] = ""
-    with pytest.raises(ValueError) as exc_info:
-        Ticket.from_salesforce_payload(sample_salesforce_payload)
-    assert "severity cannot be empty" in str(exc_info.value)
-
-
 def test_issue_type_invalid(sample_salesforce_payload):
     sample_salesforce_payload["issue_type"] = "InvalidType"
     with pytest.raises(ValueError) as exc_info:
@@ -38,13 +31,22 @@ def test_service_level_invalid(sample_salesforce_payload):
     assert "Invalid service level" in str(exc_info.value)
 
 
+def test_severity_invalid(sample_salesforce_payload):
+    sample_salesforce_payload["severity"] = "InvalidSeverity"
+    with pytest.raises(ValueError) as exc_info:
+        Ticket.from_salesforce_payload(sample_salesforce_payload)
+    assert "Invalid severity" in str(exc_info.value)
+
+
 def test_from_salesforce_payload_valid(sample_salesforce_payload):
     ticket = Ticket.from_salesforce_payload(sample_salesforce_payload)
     assert ticket.ticket_id == sample_salesforce_payload["ticket_id"]
     assert ticket.issue_type.name == sample_salesforce_payload[
         "issue_type"
     ].upper().replace(" ", "_")
-    assert ticket.severity == sample_salesforce_payload["severity"]
+    assert ticket.severity.name == sample_salesforce_payload[
+        "severity"
+    ].upper().replace(" ", "_")
     assert ticket.service == sample_salesforce_payload["service"]
     assert ticket.product_area == sample_salesforce_payload["product_area"]
     assert ticket.title == sample_salesforce_payload["title"]

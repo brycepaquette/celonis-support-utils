@@ -1,4 +1,4 @@
-from enum import Enum
+from enum import Enum, auto
 
 from celonis_support_utils.enums import Region, ServiceLevel
 from celonis_support_utils.payloads import SalesforceTicketPayload
@@ -8,6 +8,13 @@ class IssueType(Enum):
     INCIDENT = "Incident"
     QUESTION = "Question"
     SERVICE_REQUEST = "Service Request"
+
+
+class Severity(Enum):
+    SEV1 = auto()
+    SEV2 = auto()
+    SEV3 = auto()
+    SEV4 = auto()
 
 
 class Ticket:
@@ -25,7 +32,7 @@ class Ticket:
     ):
         self.ticket_id = self._require_non_empty(ticket_id, "ticket_id")
         self.issue_type = self._parse_issue_type(issue_type)
-        self.severity = self._require_non_empty(severity, "severity")
+        self.severity = self._parse_severity(severity)
         self.service = self._require_non_empty(service, "service")
         self.product_area = self._require_non_empty(product_area, "product_area")
         self.title = self._require_non_empty(title, "title")
@@ -72,6 +79,16 @@ class Ticket:
             valid_levels = [level.name for level in ServiceLevel]
             raise ValueError(
                 f"Invalid service level: {exc}. Must be one of {valid_levels}"
+            ) from exc
+
+    @staticmethod
+    def _parse_severity(value: str) -> Severity:
+        try:
+            return Severity[value.strip().upper()]
+        except KeyError as exc:
+            valid_severities = [severity.name for severity in Severity]
+            raise ValueError(
+                f"Invalid severity: {exc}. Must be one of {valid_severities}"
             ) from exc
 
     @staticmethod
