@@ -4,6 +4,8 @@ from celonis_support_utils.ticket import Ticket
 
 
 class TicketRepository(Protocol):
+    """Interface for a ticket repository."""
+
     def save(self, ticket: Ticket) -> None: ...
 
     def get_by_id(self, ticket_id: str) -> Ticket | None: ...
@@ -12,12 +14,17 @@ class TicketRepository(Protocol):
 
 
 class SalesforceTicketRepository:
+    """Salesforce implementation of the TicketRepository interface."""
+
     # TODO: Implement SalesforceTicketRepository using Salesforce API
     def save(self, ticket: Ticket) -> None:
+        """Saves a ticket to the repository."""
         raise NotImplementedError
 
     def get_by_id(self, ticket_id: str) -> Ticket | None:
+        """Retrieves a ticket by its ID."""
         raise NotImplementedError
 
     def list_open(self) -> list[Ticket]:
+        """Lists all open tickets."""
         raise NotImplementedError
