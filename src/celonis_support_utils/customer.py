@@ -11,6 +11,10 @@ class Customer:
     company_name: str
     service_level: ServiceLevel
 
+    def __post_init__(self) -> None:
+        if not self.company_name.strip():
+            raise ValueError("company_name cannot be empty")
+
     @classmethod
     def from_salesforce_payload(cls, payload: SalesforceCustomerPayload) -> "Customer":
         """Creates a Customer instance from a Salesforce payload."""
@@ -28,7 +32,3 @@ class Customer:
             raise ValueError(
                 f"Invalid service level: {exc}. Must be one of {valid_levels}"
             ) from exc
-
-    def __post_init__(self) -> None:
-        if not self.company_name.strip():
-            raise ValueError("company_name cannot be empty")
