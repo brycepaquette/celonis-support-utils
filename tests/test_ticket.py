@@ -100,6 +100,5 @@ def test_same_severity_does_not_fire_callback(sample_salesforce_payload):
     ticket.on_severity_change(callback)
     ticket.severity = Severity.SEV1  # Setting to the same severity
     assert (
-        len(calls) == 1
-    )  # Callback should still be called even if severity is the same
-    assert calls[0] == (Severity.SEV1, Severity.SEV1)
+        len(calls) == 0
+    )  # Callback should not be called since severity did not actually change

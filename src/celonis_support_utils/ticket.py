@@ -48,6 +48,8 @@ class Ticket:
 
     @severity.setter
     def severity(self, new_severity: Severity) -> None:
+        if self._severity == new_severity:
+            return
         old_severity = self._severity
         self._severity = new_severity
         for callback in self._severity_callbacks:
