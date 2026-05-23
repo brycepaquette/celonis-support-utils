@@ -23,4 +23,4 @@ def test_region_invalid(sample_engineer_data):
 
 def test_is_on_shift(sample_engineer_data):
     engineer = Engineer(**sample_engineer_data)
-    assert not engineer.is_on_shift(None)
+    assert not engineer.is_on_shift()
