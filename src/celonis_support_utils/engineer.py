@@ -7,12 +7,18 @@ class Engineer:
     """Class representing a support engineer."""
 
     def __init__(
-        self, engineer_id: str, name: str, region: str, shift: Shift | None = None
+        self,
+        engineer_id: str,
+        name: str,
+        region: str,
+        shift: Shift | None = None,
+        open_ticket_count: int = 0,
     ):
         self.engineer_id = require_non_empty(engineer_id, "id")
         self.name = require_non_empty(name, "name")
         self.region = parse_region(region)
         self.shift = shift
+        self.open_ticket_count = open_ticket_count
 
     def is_on_shift(self) -> bool:
         """

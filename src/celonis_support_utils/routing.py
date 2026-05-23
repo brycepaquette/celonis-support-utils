@@ -28,15 +28,19 @@ class StandardRouting:
     """Standard routing strategy."""
 
     def route(self, ticket: Ticket, teams: list[Team]) -> Engineer | None:
-        """Finds the first available on-shift engineer matching the ticket's region."""
+        """Finds the available on-shift engineer with the lowest open ticket count."""
         eligible_teams = [
             team for team in teams if ticket.region in (Region.GLOBAL, team.region)
         ]
-        for team in eligible_teams:
-            for engineer in team.engineers:
-                if engineer.is_on_shift():
-                    return engineer
-        return None
+        on_shift = [
+            engineer
+            for team in eligible_teams
+            for engineer in team.engineers
+            if engineer.is_on_shift()
+        ]
+        if not on_shift:
+            return None
+        return min(on_shift, key=lambda e: e.open_ticket_count)
 
 
 class EscalationRouting:
