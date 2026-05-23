@@ -17,11 +17,11 @@ def test_issue_type_invalid(sample_salesforce_payload):
     assert "Invalid issue type" in str(exc_info.value)
 
 
-def test_restriction_invalid(sample_salesforce_payload):
-    sample_salesforce_payload["restriction"] = "InvalidRegion"
+def test_region_invalid(sample_salesforce_payload):
+    sample_salesforce_payload["region"] = "InvalidRegion"
     with pytest.raises(ValueError) as exc_info:
         Ticket.from_salesforce_payload(sample_salesforce_payload)
-    assert "Invalid restriction" in str(exc_info.value)
+    assert "Invalid region" in str(exc_info.value)
 
 
 def test_service_level_invalid(sample_salesforce_payload):
@@ -51,7 +51,7 @@ def test_from_salesforce_payload_valid(sample_salesforce_payload):
     assert ticket.product_area == sample_salesforce_payload["product_area"]
     assert ticket.title == sample_salesforce_payload["title"]
     assert ticket.description == sample_salesforce_payload["description"]
-    assert ticket.restriction.name == sample_salesforce_payload["restriction"].upper()
+    assert ticket.region.name == sample_salesforce_payload["region"].upper()
     assert ticket.service_level.name == sample_salesforce_payload[
         "service_level"
     ].upper().replace(" ", "_")

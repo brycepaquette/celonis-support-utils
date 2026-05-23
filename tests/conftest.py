@@ -21,7 +21,7 @@ def sample_salesforce_payload():
         product_area="PyCelonis",
         title="PyCelonis Failure",
         description="PyCelonis is failing to sync.",
-        restriction="GLOBAL",
+        region="GLOBAL",
         service_level="STANDARD",
     )
 

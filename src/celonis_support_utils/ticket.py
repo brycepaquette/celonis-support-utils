@@ -1,17 +1,23 @@
 from collections.abc import Callable
 from enum import Enum, auto
 
-from celonis_support_utils.enums import Region, ServiceLevel
+from celonis_support_utils.enums import ServiceLevel
 from celonis_support_utils.payloads import SalesforceTicketPayload
+
+from .validators import parse_region, require_non_empty
 
 
 class IssueType(Enum):
+    """Defines the type of issue for a support ticket."""
+
     INCIDENT = "Incident"
     QUESTION = "Question"
     SERVICE_REQUEST = "Service Request"
 
 
 class Severity(Enum):
+    """Defines the severity levels for support tickets."""
+
     SEV1 = auto()
     SEV2 = auto()
     SEV3 = auto()
@@ -19,6 +25,8 @@ class Severity(Enum):
 
 
 class Ticket:
+    """Represents a support ticket with various attributes and behaviors."""
+
     def __init__(
         self,
         ticket_id: str,
@@ -28,18 +36,18 @@ class Ticket:
         product_area: str,
         title: str,
         description: str,
-        restriction: str,
+        region: str,
         service_level: str,
     ):
         self._severity_callbacks: list[Callable[[Severity, Severity], None]] = []
-        self.ticket_id = self._require_non_empty(ticket_id, "ticket_id")
+        self.ticket_id = require_non_empty(ticket_id, "ticket_id")
         self.issue_type = self._parse_issue_type(issue_type)
         self._severity = self._parse_severity(severity)
-        self.service = self._require_non_empty(service, "service")
-        self.product_area = self._require_non_empty(product_area, "product_area")
-        self.title = self._require_non_empty(title, "title")
-        self.description = self._require_non_empty(description, "description")
-        self.restriction = self._parse_restriction(restriction)
+        self.service = require_non_empty(service, "service")
+        self.product_area = require_non_empty(product_area, "product_area")
+        self.title = require_non_empty(title, "title")
+        self.description = require_non_empty(description, "description")
+        self.region = parse_region(region)
         self.service_level = self._parse_service_level(service_level)
 
     @property
@@ -58,6 +66,7 @@ class Ticket:
     def on_severity_change(
         self, callback: Callable[[Severity, Severity], None]
     ) -> None:
+        """Registers a callback to be called when the severity changes."""
         self._severity_callbacks.append(callback)
 
     def __repr__(self) -> str:
@@ -82,16 +91,6 @@ class Ticket:
             ) from exc
 
     @staticmethod
-    def _parse_restriction(value: str) -> Region:
-        try:
-            return Region[value.strip().upper()]
-        except KeyError as exc:
-            valid_regions = [region.name for region in Region]
-            raise ValueError(
-                f"Invalid restriction: {exc}. Must be one of {valid_regions}"
-            ) from exc
-
-    @staticmethod
     def _parse_service_level(value: str) -> ServiceLevel:
         try:
             return ServiceLevel[value.strip().upper().replace(" ", "_")]
@@ -111,14 +110,9 @@ class Ticket:
                 f"Invalid severity: {exc}. Must be one of {valid_severities}"
             ) from exc
 
-    @staticmethod
-    def _require_non_empty(value: str, field_name: str) -> str:
-        if not value.strip():
-            raise ValueError(f"{field_name} cannot be empty")
-        return value.strip()
-
     @classmethod
     def from_salesforce_payload(cls, payload: SalesforceTicketPayload) -> "Ticket":
+        """Creates a Ticket instance from a SalesforceTicketPayload."""
         if payload["issue_type"] == "Incident" and not payload["severity"]:
             raise ValueError("Severity is required for Incident tickets")
 
@@ -130,6 +124,6 @@ class Ticket:
             product_area=payload["product_area"],
             title=payload["title"],
             description=payload["description"],
-            restriction=payload["restriction"],
+            region=payload["region"],
             service_level=payload["service_level"],
         )

@@ -9,7 +9,7 @@ class SalesforceTicketPayload(TypedDict):
     product_area: str
     title: str
     description: str
-    restriction: Literal["Global", "EU", "US", "APAC"]
+    region: Literal["Global", "EU", "US", "APAC"]
     service_level: Literal[
         "Standard", "Premium", "Premier", "Premier Plus", "Max Success"
     ]
