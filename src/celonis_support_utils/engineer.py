@@ -1,6 +1,6 @@
 from celonis_support_utils.shift import Shift
 
-from .enums import Region
+from .validators import parse_region, require_non_empty
 
 
 class Engineer:
@@ -9,26 +9,10 @@ class Engineer:
     def __init__(
         self, engineer_id: str, name: str, region: str, shift: Shift | None = None
     ):
-        self.engineer_id = self._require_non_empty(engineer_id, "id")
-        self.name = self._require_non_empty(name, "name")
-        self.region = self._parse_region(region)
+        self.engineer_id = require_non_empty(engineer_id, "id")
+        self.name = require_non_empty(name, "name")
+        self.region = parse_region(region)
         self.shift = shift
-
-    @staticmethod
-    def _parse_region(value: str) -> Region:
-        try:
-            return Region[value.strip().upper()]
-        except KeyError as exc:
-            valid_regions = [r.name for r in Region]
-            raise ValueError(
-                f"Invalid region: {exc}. Must be one of {valid_regions}"
-            ) from exc
-
-    @staticmethod
-    def _require_non_empty(value: str, field_name: str) -> str:
-        if not value.strip():
-            raise ValueError(f"{field_name} cannot be empty")
-        return value.strip()
 
     def is_on_shift(self) -> bool:
         """
