@@ -43,7 +43,8 @@ class StandardRouting:
         ]
         if not on_shift:
             raise NoAvailableEngineerError(
-                f"No engineers currently on shift for ticket {ticket.ticket_id}"
+                ticket,
+                reason="No engineers currently on shift",
             )
         return min(on_shift, key=lambda e: e.open_ticket_count)
 

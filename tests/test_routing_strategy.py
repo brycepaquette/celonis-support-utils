@@ -42,5 +42,6 @@ def test_no_engineers_available(sample_salesforce_payload):
         routing_strategy.route(ticket, teams)
     assert (
         str(exc_info.value)
-        == f"No engineers currently on shift for ticket {ticket.ticket_id}"
+        == f"No available engineer for ticket {ticket.ticket_id!r}: "
+        "No engineers currently on shift"
     )
