@@ -1,4 +1,7 @@
+import pytest
+
 from celonis_support_utils.engineer import Engineer
+from celonis_support_utils.exceptions import NoAvailableEngineerError
 from celonis_support_utils.routing_strategy import StandardRouting
 from celonis_support_utils.team import Team
 from celonis_support_utils.ticket import Ticket
@@ -35,5 +38,9 @@ def test_no_engineers_available(sample_salesforce_payload):
     routing_strategy = StandardRouting()
     ticket = Ticket.from_salesforce_payload(sample_salesforce_payload)
     teams = [Team(name="Team US", region="US", engineers=[engineer])]
-    assigned = routing_strategy.route(ticket, teams)
-    assert assigned is None
+    with pytest.raises(NoAvailableEngineerError) as exc_info:
+        routing_strategy.route(ticket, teams)
+    assert (
+        str(exc_info.value)
+        == f"No engineers currently on shift for ticket {ticket.ticket_id}"
+    )

@@ -1,8 +1,8 @@
 from typing import Protocol
 
-from celonis_support_utils.enums import Region
-
 from .engineer import Engineer
+from .enums import Region
+from .exceptions import NoAvailableEngineerError
 from .team import Team
 from .ticket import Ticket
 
@@ -15,11 +15,11 @@ class RoutingStrategy(Protocol):
     plug in without inheritance.
     """
 
-    def route(self, ticket: Ticket, teams: list[Team]) -> Engineer | None:
+    def route(self, ticket: Ticket, teams: list[Team]) -> Engineer:
         """
         Determines which engineer should be assigned to the given ticket based
-        on the routing strategy.
-        Returns the assigned Engineer or None if no suitable engineer is found.
+        on the routing strategy. Returns the assigned Engineer or raises
+        NoAvailableEngineerError if no suitable engineer is found.
         """
         ...
 
@@ -27,7 +27,7 @@ class RoutingStrategy(Protocol):
 class StandardRouting:
     """Standard routing strategy."""
 
-    def route(self, ticket: Ticket, teams: list[Team]) -> Engineer | None:
+    def route(self, ticket: Ticket, teams: list[Team]) -> Engineer:
         """Finds the available on-shift engineer with the lowest open ticket count."""
         eligible_teams = [
             team for team in teams if ticket.region in (Region.GLOBAL, team.region)
@@ -39,7 +39,9 @@ class StandardRouting:
             if engineer.is_on_shift()
         ]
         if not on_shift:
-            return None
+            raise NoAvailableEngineerError(
+                f"No engineers currently on shift for ticket {ticket.ticket_id}"
+            )
         return min(on_shift, key=lambda e: e.open_ticket_count)
 
 
@@ -50,5 +52,5 @@ class EscalationRouting:
     On-call schedule lives outside this codebase (PagerDuty, Google Calendar, etc.)
     """
 
-    def route(self, ticket: Ticket, teams: list[Team]) -> Engineer | None:
+    def route(self, ticket: Ticket, teams: list[Team]) -> Engineer:
         raise NotImplementedError
