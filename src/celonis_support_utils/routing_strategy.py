@@ -61,3 +61,33 @@ class EscalationRouting:
 
     def route(self, ticket: Ticket, teams: list[Team]) -> Engineer:
         raise NotImplementedError
+
+
+class FallbackRouting:
+    """
+    Fallback routing: retries a primary strategy, then falls back
+    to a secondary if the first fails. Useful for implementing a
+    simple retry mechanism or for combining multiple strategies.
+    """
+
+    def __init__(self, primary: RoutingStrategy, secondary: RoutingStrategy):
+        self.primary = primary
+        self.secondary = secondary
+
+    def __repr__(self) -> str:
+        return (
+            f"FallbackRouting(primary={self.primary!r}, secondary={self.secondary!r})"
+        )
+
+    def route(self, ticket: Ticket, teams: list[Team]) -> Engineer:
+        try:
+            return self.primary.route(ticket, teams)
+        except NoAvailableEngineerError:
+            try:
+                return self.secondary.route(ticket, teams)
+            except NoAvailableEngineerError as exc:
+                raise NoAvailableEngineerError(
+                    ticket,
+                    reason="No engineers available in either primary or"
+                    " secondary strategy",
+                ) from exc
