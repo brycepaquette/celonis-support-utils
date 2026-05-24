@@ -1,9 +1,8 @@
 from collections.abc import Callable
 from enum import Enum, auto
 
-from celonis_support_utils.enums import ServiceLevel
-from celonis_support_utils.payloads import SalesforceTicketPayload
-
+from .enums import ServiceLevel
+from .payloads import SalesforceTicketPayload
 from .validators import parse_region, require_non_empty
 
 

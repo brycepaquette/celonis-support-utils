@@ -1,7 +1,7 @@
 from dataclasses import dataclass
 
-from celonis_support_utils.enums import ServiceLevel
-from celonis_support_utils.payloads import SalesforceCustomerPayload
+from .enums import ServiceLevel
+from .payloads import SalesforceCustomerPayload
 
 
 @dataclass(frozen=True)

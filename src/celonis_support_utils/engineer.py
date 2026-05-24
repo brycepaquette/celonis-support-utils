@@ -1,5 +1,4 @@
-from celonis_support_utils.shift import Shift
-
+from .shift import Shift
 from .validators import parse_region, require_non_empty
 
 
