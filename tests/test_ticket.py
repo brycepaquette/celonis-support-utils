@@ -45,6 +45,13 @@ def test_no_severity_for_incident(sample_salesforce_ticket_payload):
     assert "Severity is required for Incident tickets" in str(exc_info.value)
 
 
+def test_no_severity_for_question(sample_salesforce_ticket_payload):
+    sample_salesforce_ticket_payload["issue_type"] = "Question"
+    sample_salesforce_ticket_payload["severity"] = "-"
+    ticket = Ticket.from_salesforce_payload(sample_salesforce_ticket_payload)
+    assert ticket.severity is None
+
+
 def test_status_invalid(sample_salesforce_ticket_payload):
     sample_salesforce_ticket_payload["status"] = "InvalidStatus"
     with pytest.raises(ValueError) as exc_info:
