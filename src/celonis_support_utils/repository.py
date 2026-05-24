@@ -1,6 +1,6 @@
 from typing import Protocol
 
-from celonis_support_utils.ticket import Ticket
+from celonis_support_utils.ticket import Ticket, TicketStatus
 
 
 class TicketRepository(Protocol):
@@ -28,3 +28,26 @@ class SalesforceTicketRepository:
     def list_open(self) -> list[Ticket]:
         """Lists all open tickets."""
         raise NotImplementedError
+
+
+class InMemoryTicketRepository:
+    """In-memory implementation of the TicketRepository interface."""
+
+    def __init__(self) -> None:
+        self._tickets: dict[str, Ticket] = {}
+
+    def save(self, ticket: Ticket) -> None:
+        """Saves a ticket to the repository."""
+        self._tickets[ticket.ticket_id] = ticket
+
+    def get_by_id(self, ticket_id: str) -> Ticket | None:
+        """Retrieves a ticket by its ID."""
+        return self._tickets.get(ticket_id)
+
+    def list_open(self) -> list[Ticket]:
+        """Lists all open tickets."""
+        return [
+            ticket
+            for ticket in self._tickets.values()
+            if ticket.status != TicketStatus.CLOSED
+        ]

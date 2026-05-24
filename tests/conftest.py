@@ -6,6 +6,7 @@ from celonis_support_utils.payloads import (
     SalesforceTicketPayload,
 )
 from celonis_support_utils.shift import Shift
+from celonis_support_utils.ticket import Ticket
 
 
 @pytest.fixture
@@ -36,6 +37,11 @@ def sample_always_on_shift():
         timezone="America/New_York",
         active_days=["MO", "TUE", "WED", "THU", "FRI", "SAT", "SUN"],
     )
+
+
+@pytest.fixture
+def sample_salesforce_ticket(sample_salesforce_payload):
+    return Ticket.from_salesforce_payload(sample_salesforce_payload)
 
 
 @pytest.fixture
