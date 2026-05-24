@@ -1,5 +1,5 @@
 from celonis_support_utils.engineer import Engineer
-from celonis_support_utils.routing import StandardRouting
+from celonis_support_utils.routing_strategy import StandardRouting
 from celonis_support_utils.team import Team
 from celonis_support_utils.ticket import Ticket
 

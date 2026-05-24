@@ -57,6 +57,7 @@ def sample_salesforce_payload():
         region="GLOBAL",
         service_level="STANDARD",
         status="In Progress",
+        assignee="Alice Baker",
     )
 
 
