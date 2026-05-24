@@ -45,8 +45,9 @@ class StandardRouting:
 
 class EscalationRouting:
     """
-    Escalation routing: finds the most senior engineer regardless of shift.
-    TODO: Requires Engineer seniority levels (L1/L2) and product area matching.
+    Escalation routing: routes to the L2 engineer currently on-call.
+    TODO: Requires on-call schedule integration — separate from shift schedule.
+    On-call schedule lives outside this codebase (PagerDuty, Google Calendar, etc.)
     """
 
     def route(self, ticket: Ticket, teams: list[Team]) -> Engineer | None:
