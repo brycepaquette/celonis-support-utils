@@ -1,4 +1,5 @@
 from celonis_support_utils.repository import InMemoryTicketRepository
+from celonis_support_utils.ticket import TicketStatus
 
 
 def test_InMemoryTicketRepository_save_get_by_id(sample_salesforce_ticket):
@@ -21,3 +22,10 @@ def test_InMemoryTicketRepository_unknown_ticket_id(sample_salesforce_ticket):
     repo = InMemoryTicketRepository()
     repo.save(sample_salesforce_ticket)
     assert repo.get_by_id("unknown_id") is None
+
+
+def test_InMemoryTicketRepository_list_open_excludes_closed(sample_salesforce_ticket):
+    repo = InMemoryTicketRepository()
+    sample_salesforce_ticket.status = TicketStatus.CLOSED
+    repo.save(sample_salesforce_ticket)
+    assert repo.list_open() == []
