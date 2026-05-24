@@ -38,6 +38,13 @@ def test_severity_invalid(sample_salesforce_payload):
     assert "Invalid severity" in str(exc_info.value)
 
 
+def test_status_invalid(sample_salesforce_payload):
+    sample_salesforce_payload["status"] = "InvalidStatus"
+    with pytest.raises(ValueError) as exc_info:
+        Ticket.from_salesforce_payload(sample_salesforce_payload)
+    assert "Invalid status" in str(exc_info.value)
+
+
 def test_from_salesforce_payload_valid(sample_salesforce_payload):
     ticket = Ticket.from_salesforce_payload(sample_salesforce_payload)
     assert ticket.ticket_id == sample_salesforce_payload["ticket_id"]
@@ -55,6 +62,9 @@ def test_from_salesforce_payload_valid(sample_salesforce_payload):
     assert ticket.service_level.name == sample_salesforce_payload[
         "service_level"
     ].upper().replace(" ", "_")
+    assert ticket.status.name == sample_salesforce_payload["status"].upper().replace(
+        " ", "_"
+    )
 
 
 def test_ticket_equality(sample_salesforce_payload):

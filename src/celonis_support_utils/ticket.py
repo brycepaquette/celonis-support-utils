@@ -24,6 +24,16 @@ class Severity(Enum):
     SEV4 = auto()
 
 
+class TicketStatus(Enum):
+    """Defines the status options for support tickets."""
+
+    NEW = "New"
+    IN_PROGRESS = "In Progress"
+    ON_HOLD = "On Hold"
+    SOLUTION_PROVIDED = "Solution Provided"
+    CLOSED = "Closed"
+
+
 class Ticket:
     """Represents a support ticket with various attributes and behaviors."""
 
@@ -50,7 +60,7 @@ class Ticket:
         self.description = require_non_empty(description, "description")
         self.region = parse_region(region)
         self.service_level = self._parse_service_level(service_level)
-        self.status = require_non_empty(status, "status")
+        self.status = self._parse_ticket_status(status)
 
     def __repr__(self) -> str:
         return f"Ticket(ticket_id={self.ticket_id!r}, issue_type={self.issue_type!r})"
@@ -131,4 +141,14 @@ class Ticket:
             valid_severities = [severity.name for severity in Severity]
             raise ValueError(
                 f"Invalid severity: {exc}. Must be one of {valid_severities}"
+            ) from exc
+
+    @staticmethod
+    def _parse_ticket_status(value: str) -> TicketStatus:
+        try:
+            return TicketStatus[value.strip().upper().replace(" ", "_")]
+        except KeyError as exc:
+            valid_statuses = [ticket_status.name for ticket_status in TicketStatus]
+            raise ValueError(
+                f"Invalid status: {exc}. Must be one of {valid_statuses}"
             ) from exc
