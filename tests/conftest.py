@@ -19,12 +19,22 @@ def sample_engineer_data():
 
 
 @pytest.fixture
-def sample_engineer_active_shift(sample_always_on_shift):
+def sample_engineer_on_shift(sample_always_on_shift):
     return Engineer(
         engineer_id="1",
         name="Alice",
         region="US",
         shift=sample_always_on_shift,
+    )
+
+
+@pytest.fixture
+def sample_engineer_off_shift():
+    return Engineer(
+        engineer_id="2",
+        name="Bob",
+        region="US",
+        shift=None,
     )
 
 

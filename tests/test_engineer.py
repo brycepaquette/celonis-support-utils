@@ -21,5 +21,5 @@ def test_region_invalid(sample_engineer_data):
         Engineer(**sample_engineer_data)
 
 
-def test_is_on_shift(sample_engineer_active_shift):
-    assert sample_engineer_active_shift.is_on_shift()
+def test_is_on_shift(sample_engineer_on_shift):
+    assert sample_engineer_on_shift.is_on_shift()
