@@ -27,6 +27,9 @@ class RoutingStrategy(Protocol):
 class StandardRouting:
     """Standard routing strategy."""
 
+    def __repr__(self) -> str:
+        return "StandardRouting()"
+
     def route(self, ticket: Ticket, teams: list[Team]) -> Engineer:
         """Finds the available on-shift engineer with the lowest open ticket count."""
         eligible_teams = [
@@ -51,6 +54,9 @@ class EscalationRouting:
     TODO: Requires on-call schedule integration — separate from shift schedule.
     On-call schedule lives outside this codebase (PagerDuty, Google Calendar, etc.)
     """
+
+    def __repr__(self) -> str:
+        return "EscalationRouting()"
 
     def route(self, ticket: Ticket, teams: list[Team]) -> Engineer:
         raise NotImplementedError

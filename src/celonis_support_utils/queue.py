@@ -7,6 +7,15 @@ class Queue[T]:
         self.name = name
         self._queue: list[T] = []
 
+    def __len__(self) -> int:
+        return len(self._queue)
+
+    def __bool__(self) -> bool:
+        return bool(self._queue)
+
+    def __repr__(self) -> str:
+        return f"Queue(name={self.name}, size={len(self)})"
+
     def add(self, item: T) -> None:
         """Add an item to the end of the queue."""
         self._queue.append(item)
@@ -16,9 +25,3 @@ class Queue[T]:
         if not self._queue:
             return None
         return self._queue.pop(0)
-
-    def __len__(self) -> int:
-        return len(self._queue)
-
-    def __bool__(self) -> bool:
-        return bool(self._queue)

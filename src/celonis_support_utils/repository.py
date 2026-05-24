@@ -17,6 +17,10 @@ class SalesforceTicketRepository:
     """Salesforce implementation of the TicketRepository interface."""
 
     # TODO: Implement SalesforceTicketRepository using Salesforce API
+
+    def __repr__(self) -> str:
+        return "SalesforceTicketRepository()"
+
     def save(self, ticket: Ticket) -> None:
         """Saves a ticket to the repository."""
         raise NotImplementedError
@@ -35,6 +39,9 @@ class InMemoryTicketRepository:
 
     def __init__(self) -> None:
         self._tickets: dict[str, Ticket] = {}
+
+    def __repr__(self) -> str:
+        return f"InMemoryTicketRepository(tickets={len(self._tickets)})"
 
     def save(self, ticket: Ticket) -> None:
         """Saves a ticket to the repository."""

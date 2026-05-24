@@ -11,3 +11,6 @@ class Team:
         self.name = require_non_empty(name, "name")
         self.region = parse_region(region)
         self.engineers = engineers
+
+    def __repr__(self) -> str:
+        return f"Team(name={self.name}, region={self.region})"

@@ -62,7 +62,7 @@ class Shift:
     def _parse_timezone(value: str) -> ZoneInfo:
         try:
             return ZoneInfo(value)
-        except Exception as exc:
+        except KeyError as exc:
             raise ValueError("Timezone must be a valid IANA timezone") from exc
 
     @staticmethod

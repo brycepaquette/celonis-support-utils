@@ -12,6 +12,9 @@ class RoutingEngine:
         self.strategy = strategy
         self.repo = repo
 
+    def __repr__(self) -> str:
+        return f"RoutingEngine(strategy={self.strategy.__class__.__name__!r})"
+
     def assign(self, ticket: Ticket, teams: list[Team]) -> Engineer:
         engineer = self.strategy.route(ticket, teams)
         ticket.assignee = engineer.name
@@ -20,6 +23,3 @@ class RoutingEngine:
 
     def swap_strategy(self, new_strategy: RoutingStrategy) -> None:
         self.strategy = new_strategy
-
-    def __repr__(self) -> str:
-        return f"RoutingEngine(strategy={self.strategy.__class__.__name__!r})"

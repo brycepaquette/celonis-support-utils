@@ -90,18 +90,11 @@ class Ticket:
         for callback in self._severity_callbacks:
             callback(old_severity, new_severity)
 
-    def on_severity_change(
-        self, callback: Callable[[Severity, Severity], None]
-    ) -> None:
-        """Registers a callback to be called when the severity changes."""
-        self._severity_callbacks.append(callback)
-
     @classmethod
     def from_salesforce_payload(cls, payload: SalesforceTicketPayload) -> "Ticket":
         """Creates a Ticket instance from a SalesforceTicketPayload."""
         if payload["issue_type"] == "Incident" and not payload["severity"]:
             raise ValueError("Severity is required for Incident tickets")
-
         return cls(
             ticket_id=payload["ticket_id"],
             issue_type=payload["issue_type"],
@@ -115,6 +108,12 @@ class Ticket:
             status=payload["status"],
             assignee=payload["assignee"],
         )
+
+    def on_severity_change(
+        self, callback: Callable[[Severity, Severity], None]
+    ) -> None:
+        """Registers a callback to be called when the severity changes."""
+        self._severity_callbacks.append(callback)
 
     @staticmethod
     def _parse_issue_type(value: str) -> IssueType:
