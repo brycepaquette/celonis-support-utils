@@ -40,7 +40,7 @@ class Ticket:
         self,
         ticket_id: str,
         issue_type: str,
-        severity: str,
+        severity: str | None,
         service: str,
         product_area: str,
         title: str,
@@ -50,10 +50,14 @@ class Ticket:
         status: str,
         assignee: str,
     ):
-        self._severity_callbacks: list[Callable[[Severity, Severity], None]] = []
+        self._severity_callbacks: list[
+            Callable[[Severity | None, Severity | None], None]
+        ] = []
         self.ticket_id = require_non_empty(ticket_id, "ticket_id")
         self.issue_type = self._parse_issue_type(issue_type)
-        self._severity = self._parse_severity(severity)
+        self._severity = (
+            self._parse_severity(severity) if severity is not None else None
+        )
         self.service = require_non_empty(service, "service")
         self.product_area = require_non_empty(product_area, "product_area")
         self.title = require_non_empty(title, "title")
@@ -61,7 +65,7 @@ class Ticket:
         self.region = parse_region(region)
         self.service_level = self._parse_service_level(service_level)
         self.status = self._parse_ticket_status(status)
-        self.assignee = assignee
+        self.assignee = require_non_empty(assignee, "assignee")
 
     def __repr__(self) -> str:
         return f"Ticket(ticket_id={self.ticket_id!r}, issue_type={self.issue_type!r})"
@@ -75,12 +79,12 @@ class Ticket:
         return hash(self.ticket_id)
 
     @property
-    def severity(self) -> Severity:
+    def severity(self) -> Severity | None:
         """Gets the current severity of the ticket."""
         return self._severity
 
     @severity.setter
-    def severity(self, new_severity: Severity) -> None:
+    def severity(self, new_severity: Severity | None) -> None:
         """Sets a new severity for the ticket and triggers callbacks if it changes."""
         if self._severity == new_severity:
             return
@@ -92,12 +96,14 @@ class Ticket:
     @classmethod
     def from_salesforce_payload(cls, payload: SalesforceTicketPayload) -> "Ticket":
         """Creates a Ticket instance from a SalesforceTicketPayload."""
-        if payload["issue_type"] == "Incident" and not payload["severity"]:
+
+        if payload["issue_type"] == "Incident" and payload["severity"] == "-":
             raise ValueError("Severity is required for Incident tickets")
+
         return cls(
             ticket_id=payload["ticket_id"],
             issue_type=payload["issue_type"],
-            severity=payload["severity"],
+            severity=payload["severity"] if payload["severity"] != "-" else None,
             service=payload["service"],
             product_area=payload["product_area"],
             title=payload["title"],
@@ -109,7 +115,7 @@ class Ticket:
         )
 
     def on_severity_change(
-        self, callback: Callable[[Severity, Severity], None]
+        self, callback: Callable[[Severity | None, Severity | None], None]
     ) -> None:
         """Registers a callback to be called when the severity changes."""
         self._severity_callbacks.append(callback)

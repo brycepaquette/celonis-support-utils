@@ -6,7 +6,7 @@ class SalesforceTicketPayload(TypedDict):
 
     ticket_id: str
     issue_type: Literal["Incident", "Question", "Service Request"]
-    severity: Literal["SEV1", "SEV2", "SEV3", "SEV4"]
+    severity: Literal["-", "SEV1", "SEV2", "SEV3", "SEV4"]
     service: str
     product_area: str
     title: str

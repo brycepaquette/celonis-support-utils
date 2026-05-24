@@ -40,12 +40,12 @@ def sample_always_on_shift():
 
 
 @pytest.fixture
-def sample_salesforce_ticket(sample_salesforce_payload):
-    return Ticket.from_salesforce_payload(sample_salesforce_payload)
+def sample_salesforce_ticket(sample_salesforce_ticket_payload):
+    return Ticket.from_salesforce_payload(sample_salesforce_ticket_payload)
 
 
 @pytest.fixture
-def sample_salesforce_payload():
+def sample_salesforce_ticket_payload():
     return SalesforceTicketPayload(
         ticket_id="123",
         issue_type="Incident",
