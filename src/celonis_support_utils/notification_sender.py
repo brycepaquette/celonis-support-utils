@@ -16,6 +16,9 @@ class SlackSender(NotificationSender):
     def __init__(self, webhook_url: str):
         self.webhook_url = webhook_url
 
+    def __repr__(self) -> str:
+        return f"SlackSender(webhook_url='{self.webhook_url}')"
+
     def send(self, message: str) -> None:
         """Sends a message to a Slack channel using the provided webhook URL."""
         payload = {"text": message}

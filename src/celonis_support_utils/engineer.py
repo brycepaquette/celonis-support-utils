@@ -20,6 +20,11 @@ class Engineer:
         self.shift = shift
         self.open_ticket_count = open_ticket_count
 
+    def __repr__(self) -> str:
+        return (
+            f"Engineer(id={self.engineer_id}, name={self.name}, region={self.region})"
+        )
+
     def is_on_shift(self) -> bool:
         """
         Returns True if the engineer is currently on shift.
