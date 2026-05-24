@@ -50,6 +50,7 @@ def sample_salesforce_payload():
         description="PyCelonis is failing to sync.",
         region="GLOBAL",
         service_level="STANDARD",
+        status="In Progress",
     )
 
 

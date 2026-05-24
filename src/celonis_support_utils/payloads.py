@@ -15,6 +15,7 @@ class SalesforceTicketPayload(TypedDict):
     service_level: Literal[
         "Standard", "Premium", "Premier", "Premier Plus", "Max Success"
     ]
+    status: Literal["New", "In Progress", "On Hold", "Solution Provided", "Closed"]
 
 
 class SalesforceCustomerPayload(TypedDict):

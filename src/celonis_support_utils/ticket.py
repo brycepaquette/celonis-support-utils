@@ -38,6 +38,7 @@ class Ticket:
         description: str,
         region: str,
         service_level: str,
+        status: str,
     ):
         self._severity_callbacks: list[Callable[[Severity, Severity], None]] = []
         self.ticket_id = require_non_empty(ticket_id, "ticket_id")
@@ -49,6 +50,7 @@ class Ticket:
         self.description = require_non_empty(description, "description")
         self.region = parse_region(region)
         self.service_level = self._parse_service_level(service_level)
+        self.status = require_non_empty(status, "status")
 
     def __repr__(self) -> str:
         return f"Ticket(ticket_id={self.ticket_id!r}, issue_type={self.issue_type!r})"
@@ -98,6 +100,7 @@ class Ticket:
             description=payload["description"],
             region=payload["region"],
             service_level=payload["service_level"],
+            status=payload["status"],
         )
 
     @staticmethod
