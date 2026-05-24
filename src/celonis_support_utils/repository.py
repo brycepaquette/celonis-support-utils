@@ -1,6 +1,6 @@
 from typing import Protocol
 
-from celonis_support_utils.ticket import Ticket, TicketStatus
+from .ticket import Ticket, TicketStatus
 
 
 class TicketRepository(Protocol):
