@@ -16,8 +16,6 @@ class TicketRepository(Protocol):
 class SalesforceTicketRepository:
     """Salesforce implementation of the TicketRepository interface."""
 
-    # TODO: Implement SalesforceTicketRepository using Salesforce API
-
     def __repr__(self) -> str:
         return "SalesforceTicketRepository()"
 

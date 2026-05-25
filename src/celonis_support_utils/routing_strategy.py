@@ -50,11 +50,7 @@ class StandardRouting:
 
 
 class EscalationRouting:
-    """
-    Escalation routing: routes to the L2 engineer currently on-call.
-    TODO: Requires on-call schedule integration — separate from shift schedule.
-    On-call schedule lives outside this codebase (PagerDuty, Google Calendar, etc.)
-    """
+    """Escalation routing: routes to the L2 engineer currently on-call."""
 
     def __repr__(self) -> str:
         return "EscalationRouting()"
