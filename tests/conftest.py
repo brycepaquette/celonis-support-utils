@@ -68,9 +68,12 @@ def sample_salesforce_ticket_payload():
         service_level="STANDARD",
         status="In Progress",
         assignee="Alice Baker",
+        customer_id="1",
     )
 
 
 @pytest.fixture
 def sample_salesforce_customer_payload():
-    return SalesforceCustomerPayload(company_name="Acme Corp", service_level="Premium")
+    return SalesforceCustomerPayload(
+        customer_id="1", company_name="Acme Corp", service_level="Premium"
+    )

@@ -30,7 +30,17 @@ def test_service_level_with_spaces(sample_salesforce_customer_payload):
     assert customer.service_level == ServiceLevel.PREMIER_PLUS
 
 
-def test_customer_name_empty():
+def test_customer_name_empty(sample_salesforce_customer_payload):
     with pytest.raises(ValueError) as exc_info:
-        Customer(company_name="", service_level=ServiceLevel.STANDARD)
+        Customer.from_salesforce_payload(
+            {**sample_salesforce_customer_payload, "company_name": "   "}
+        )
     assert "company_name cannot be empty" in str(exc_info.value)
+
+
+def test_customer_id_empty(sample_salesforce_customer_payload):
+    with pytest.raises(ValueError) as exc_info:
+        Customer.from_salesforce_payload(
+            {**sample_salesforce_customer_payload, "customer_id": "   "}
+        )
+    assert "customer_id cannot be empty" in str(exc_info.value)

@@ -8,10 +8,13 @@ from .payloads import SalesforceCustomerPayload
 class Customer:
     """Represents a customer with a company name and service level."""
 
+    customer_id: str
     company_name: str
     service_level: ServiceLevel
 
     def __post_init__(self) -> None:
+        if not self.customer_id.strip():
+            raise ValueError("customer_id cannot be empty")
         if not self.company_name.strip():
             raise ValueError("company_name cannot be empty")
 
@@ -19,6 +22,7 @@ class Customer:
     def from_salesforce_payload(cls, payload: SalesforceCustomerPayload) -> "Customer":
         """Creates a Customer instance from a Salesforce payload."""
         return cls(
+            customer_id=payload["customer_id"],
             company_name=payload["company_name"],
             service_level=Customer._parse_service_level(payload["service_level"]),
         )

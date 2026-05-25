@@ -49,6 +49,7 @@ class Ticket:
         service_level: str,
         status: str,
         assignee: str,
+        customer_id: str,
     ):
         self._severity_callbacks: list[
             Callable[[Severity | None, Severity | None], None]
@@ -66,6 +67,7 @@ class Ticket:
         self.service_level = self._parse_service_level(service_level)
         self.status = self._parse_ticket_status(status)
         self.assignee = require_non_empty(assignee, "assignee")
+        self.customer_id = require_non_empty(customer_id, "customer_id")
 
     def __repr__(self) -> str:
         return f"Ticket(ticket_id={self.ticket_id!r}, issue_type={self.issue_type!r})"
@@ -112,6 +114,7 @@ class Ticket:
             service_level=payload["service_level"],
             status=payload["status"],
             assignee=payload["assignee"],
+            customer_id=payload["customer_id"],
         )
 
     def on_severity_change(

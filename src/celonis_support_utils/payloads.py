@@ -17,11 +17,13 @@ class SalesforceTicketPayload(TypedDict):
     ]
     status: Literal["New", "In Progress", "On Hold", "Solution Provided", "Closed"]
     assignee: str
+    customer_id: str
 
 
 class SalesforceCustomerPayload(TypedDict):
     """Payload for creating a customer in Salesforce."""
 
+    customer_id: str
     company_name: str
     service_level: Literal[
         "Standard", "Premium", "Premier", "Premier Plus", "Max Success"
