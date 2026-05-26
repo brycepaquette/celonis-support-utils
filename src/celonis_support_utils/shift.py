@@ -27,7 +27,10 @@ class Shift:
 
         if current_day not in self.active_days:
             return False
-        if self.start_time <= self.end_time:
+        if self.start_time == self.end_time:
+            # Equal times means 24-hour shift
+            return True
+        if self.start_time < self.end_time:
             return self.start_time <= current_time < self.end_time
         else:
             # Shift spans midnight
