@@ -3,46 +3,19 @@ import pytest
 from celonis_support_utils.ticket import Severity, Ticket
 
 
-def test_ticket_id_empty(sample_salesforce_ticket_payload):
-    sample_salesforce_ticket_payload["ticket_id"] = ""
-    with pytest.raises(ValueError) as exc_info:
+def test_ticket_field_validation(
+    sample_salesforce_ticket_payload, invalid_ticket_field
+):
+    field, value, match = invalid_ticket_field
+    sample_salesforce_ticket_payload[field] = value
+    with pytest.raises(ValueError, match=match):
         Ticket.from_salesforce_payload(sample_salesforce_ticket_payload)
-    assert "ticket_id cannot be empty" in str(exc_info.value)
-
-
-def test_issue_type_invalid(sample_salesforce_ticket_payload):
-    sample_salesforce_ticket_payload["issue_type"] = "InvalidType"
-    with pytest.raises(ValueError) as exc_info:
-        Ticket.from_salesforce_payload(sample_salesforce_ticket_payload)
-    assert "Invalid issue type" in str(exc_info.value)
-
-
-def test_region_invalid(sample_salesforce_ticket_payload):
-    sample_salesforce_ticket_payload["region"] = "InvalidRegion"
-    with pytest.raises(ValueError) as exc_info:
-        Ticket.from_salesforce_payload(sample_salesforce_ticket_payload)
-    assert "Invalid region" in str(exc_info.value)
-
-
-def test_service_level_invalid(sample_salesforce_ticket_payload):
-    sample_salesforce_ticket_payload["service_level"] = "InvalidLevel"
-    with pytest.raises(ValueError) as exc_info:
-        Ticket.from_salesforce_payload(sample_salesforce_ticket_payload)
-    assert "Invalid service level" in str(exc_info.value)
-
-
-def test_severity_invalid(sample_salesforce_ticket_payload):
-    sample_salesforce_ticket_payload["severity"] = "InvalidSeverity"
-    with pytest.raises(ValueError) as exc_info:
-        Ticket.from_salesforce_payload(sample_salesforce_ticket_payload)
-    assert "Invalid severity" in str(exc_info.value)
 
 
 def test_no_severity_for_incident(sample_salesforce_ticket_payload):
     sample_salesforce_ticket_payload["severity"] = "-"
-    with pytest.raises(ValueError) as exc_info:
+    with pytest.raises(ValueError, match="Severity is required for Incident tickets"):
         Ticket.from_salesforce_payload(sample_salesforce_ticket_payload)
-    assert "Severity is required for Incident tickets" in str(exc_info.value)
 
 
 def test_no_severity_for_question(sample_salesforce_ticket_payload):
@@ -52,18 +25,25 @@ def test_no_severity_for_question(sample_salesforce_ticket_payload):
     assert ticket.severity is None
 
 
-def test_status_invalid(sample_salesforce_ticket_payload):
-    sample_salesforce_ticket_payload["status"] = "InvalidStatus"
-    with pytest.raises(ValueError) as exc_info:
-        Ticket.from_salesforce_payload(sample_salesforce_ticket_payload)
-    assert "Invalid status" in str(exc_info.value)
-
-
-def test_assignee_empty(sample_salesforce_ticket_payload):
-    sample_salesforce_ticket_payload["assignee"] = ""
-    with pytest.raises(ValueError) as exc_info:
-        Ticket.from_salesforce_payload(sample_salesforce_ticket_payload)
-    assert "assignee cannot be empty" in str(exc_info.value)
+@pytest.mark.parametrize(
+    "severity_str, expected_severity",
+    [
+        ("Sev1", Severity.SEV1),
+        ("sev2", Severity.SEV2),
+        ("SEV3", Severity.SEV3),
+        ("SEV4", Severity.SEV4),
+        ("-", None),
+    ],
+)
+def test_severity_parsing(
+    sample_salesforce_ticket_payload, severity_str, expected_severity
+):
+    sample_salesforce_ticket_payload["issue_type"] = (
+        "Question" if severity_str == "-" else "Incident"
+    )
+    sample_salesforce_ticket_payload["severity"] = severity_str
+    ticket = Ticket.from_salesforce_payload(sample_salesforce_ticket_payload)
+    assert ticket.severity == expected_severity
 
 
 def test_from_salesforce_payload_valid(sample_salesforce_ticket_payload):
