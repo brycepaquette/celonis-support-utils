@@ -20,8 +20,8 @@ def test_queue_name_empty():
 def test_queue_add(queue, sample_salesforce_ticket_payload):
     new_ticket = Ticket.from_salesforce_payload(sample_salesforce_ticket_payload)
     queue.add(new_ticket)
-    assert len(queue._queue) == 1
-    assert queue._queue[0] == new_ticket
+    assert len(queue) == 1
+    assert queue.next() == new_ticket
 
 
 def test_queue_next(queue, sample_salesforce_ticket_payload):
@@ -29,4 +29,4 @@ def test_queue_next(queue, sample_salesforce_ticket_payload):
     queue.add(new_ticket)
     next_ticket = queue.next()
     assert next_ticket == new_ticket
-    assert len(queue._queue) == 0
+    assert len(queue) == 0
