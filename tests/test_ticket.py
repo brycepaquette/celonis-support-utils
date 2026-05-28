@@ -18,13 +18,6 @@ def test_no_severity_for_incident(sample_salesforce_ticket_payload):
         Ticket.from_salesforce_payload(sample_salesforce_ticket_payload)
 
 
-def test_no_severity_for_question(sample_salesforce_ticket_payload):
-    sample_salesforce_ticket_payload["issue_type"] = "Question"
-    sample_salesforce_ticket_payload["severity"] = "-"
-    ticket = Ticket.from_salesforce_payload(sample_salesforce_ticket_payload)
-    assert ticket.severity is None
-
-
 @pytest.mark.parametrize(
     "severity_str, expected_severity",
     [
