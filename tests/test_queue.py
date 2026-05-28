@@ -21,7 +21,6 @@ def test_queue_add(queue, sample_salesforce_ticket_payload):
     new_ticket = Ticket.from_salesforce_payload(sample_salesforce_ticket_payload)
     queue.add(new_ticket)
     assert len(queue) == 1
-    assert queue.next() == new_ticket
 
 
 def test_queue_next(queue, sample_salesforce_ticket_payload):
