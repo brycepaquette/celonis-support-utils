@@ -1,3 +1,5 @@
+from unittest.mock import MagicMock
+
 import pytest
 
 from celonis_support_utils.ticket import Severity, Ticket
@@ -84,26 +86,16 @@ def test_hashable(sample_salesforce_ticket_payload):
 
 def test_severity_change_fires_callback(sample_salesforce_ticket_payload):
     ticket = Ticket.from_salesforce_payload(sample_salesforce_ticket_payload)
-    calls = []
-
-    def callback(old, new):
-        calls.append((old, new))
-
-    ticket.on_severity_change(callback)
+    mock_callback = MagicMock()
+    ticket.on_severity_change(mock_callback)
     ticket.severity = Severity.SEV2
-    assert len(calls) == 1
-    assert calls[0] == (Severity.SEV1, Severity.SEV2)
+    mock_callback.assert_called_once_with(Severity.SEV1, Severity.SEV2)
 
 
 def test_same_severity_does_not_fire_callback(sample_salesforce_ticket_payload):
     ticket = Ticket.from_salesforce_payload(sample_salesforce_ticket_payload)
-    calls = []
+    mock_callback = MagicMock()
 
-    def callback(old, new):
-        calls.append((old, new))
-
-    ticket.on_severity_change(callback)
+    ticket.on_severity_change(mock_callback)
     ticket.severity = Severity.SEV1  # Setting to the same severity
-    assert (
-        len(calls) == 0
-    )  # Callback should not be called since severity did not actually change
+    mock_callback.assert_not_called()
