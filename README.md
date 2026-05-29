@@ -1,6 +1,7 @@
 # celonis-support-utils
 
 [![CI](https://github.com/brycepaquette/celonis-support-utils/actions/workflows/ci.yml/badge.svg)](https://github.com/brycepaquette/celonis-support-utils/actions/workflows/ci.yml)
+[![codecov](https://codecov.io/gh/brycepaquette/celonis-support-utils/branch/main/graph/badge.svg)](https://codecov.io/gh/brycepaquette/celonis-support-utils)
 
 A Python package implementing a customer support ticket routing domain, built as a deliberate exercise in object-oriented design, type safety, and production-grade Python project structure.
 
