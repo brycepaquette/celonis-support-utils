@@ -4,6 +4,7 @@ from .enums import Region
 
 
 def parse_region(value: str) -> Region:
+    """Parses a string into a Region enum, case-insensitive."""
     try:
         return Region[value.strip().upper()]
     except KeyError as exc:
@@ -14,6 +15,7 @@ def parse_region(value: str) -> Region:
 
 
 def require_non_empty(value: str, field_name: str) -> str:
+    """Validates that a string is not empty or just whitespace."""
     if not value.strip():
         raise ValueError(f"{field_name} cannot be empty")
     return value.strip()

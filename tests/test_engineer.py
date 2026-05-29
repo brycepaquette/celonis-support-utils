@@ -12,3 +12,7 @@ def test_engineer_field_validation(sample_engineer_data, invalid_engineer_field)
 
 def test_is_on_shift(sample_engineer_on_shift):
     assert sample_engineer_on_shift.is_on_shift()
+
+
+def test_is_not_on_shift(sample_engineer_off_shift):
+    assert not sample_engineer_off_shift.is_on_shift()

@@ -56,6 +56,7 @@ class EscalationRouting:
         return "EscalationRouting()"
 
     def route(self, ticket: Ticket, teams: list[Team]) -> Engineer:
+        """Finds the L2 engineer currently on-call for the ticket's region."""
         raise NotImplementedError
 
 
@@ -66,7 +67,7 @@ class FallbackRouting:
     simple retry mechanism or for combining multiple strategies.
     """
 
-    def __init__(self, primary: RoutingStrategy, secondary: RoutingStrategy):
+    def __init__(self, primary: RoutingStrategy, secondary: RoutingStrategy) -> None:
         self.primary = primary
         self.secondary = secondary
 
