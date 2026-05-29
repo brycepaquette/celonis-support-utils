@@ -131,7 +131,9 @@ The project was also designed to demonstrate specific OOP patterns intentionally
 - `ruff` for linting — zero warnings
 - `pre-commit` hooks run on every commit
 - `pytest` test suite with 10 test modules covering all public classes
-- GitHub Actions CI runs on every push: ruff → mypy → pytest
+- `pytest-mock` for `MagicMock` and `mocker.patch()` based tests
+- 90% test coverage reported via Codecov
+- GitHub Actions CI runs on every push: ruff → mypy → pytest → coverage upload
 
 ---
 
@@ -146,6 +148,9 @@ uv sync --all-extras
 
 # Run tests
 uv run pytest
+
+# Run tests with coverage
+uv run pytest --cov=src --cov-report=term-missing
 
 # Type check (strict)
 uv run mypy src/ --strict
