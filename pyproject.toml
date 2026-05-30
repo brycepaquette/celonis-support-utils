@@ -12,6 +12,9 @@ dependencies = [
     "types-requests>=2.33.0.20260518",
 ]
 
+[project.scripts]
+sca = "celonis_support_utils.cli:main"
+
 [build-system]
 requires = ["uv_build>=0.11.14,<0.12.0"]
 build-backend = "uv_build"

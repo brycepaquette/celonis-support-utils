@@ -124,7 +124,6 @@ def invalid_engineer_field(request: pytest.FixtureRequest):
         ("service_level", "BadLevel", "Invalid service level"),
         ("severity", "BadSev", "Invalid severity"),
         ("status", "BadStatus", "Invalid status"),
-        ("assignee", "", "assignee cannot be empty"),
     ],
     ids=[
         "ticket_id",
@@ -133,7 +132,6 @@ def invalid_engineer_field(request: pytest.FixtureRequest):
         "service_level",
         "severity",
         "status",
-        "assignee",
     ],
 )
 def invalid_ticket_field(request: pytest.FixtureRequest):

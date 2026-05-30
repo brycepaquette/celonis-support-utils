@@ -40,6 +40,45 @@ src/celonis_support_utils/
 
 ## Architecture
 
+```mermaid
+classDiagram
+    class RoutingEngine {
+        +strategy: RoutingStrategy
+        +repo: TicketRepository
+        +assign(ticket, teams) Engineer
+        +swap_strategy(strategy) None
+    }
+    class RoutingStrategy {
+        <<Protocol>>
+        +route(ticket, teams) Engineer
+    }
+    class TicketRepository {
+        <<Protocol>>
+        +save(ticket) None
+        +get_by_id(ticket_id) Ticket
+    }
+    class Ticket {
+        +from_salesforce_payload(payload) Ticket
+        +set_severity(severity) None
+        +on_severity_change(callback) None
+    }
+    class Engineer {
+        +shift: Shift
+        +is_on_shift() bool
+    }
+    class Shift {
+        +is_active() bool
+    }
+    RoutingEngine --> RoutingStrategy
+    RoutingEngine --> TicketRepository
+    RoutingStrategy <|.. StandardRouting
+    RoutingStrategy <|.. EscalationRouting
+    RoutingStrategy <|.. FallbackRouting
+    FallbackRouting --> RoutingStrategy
+    Engineer --> Shift
+    TicketRepository <|.. InMemoryTicketRepository
+```
+
 ### Key relationships
 
 - `Ticket` carries `IssueType`, `Severity | None`, `TicketStatus`, and `Region`: all parsed from Salesforce string payloads at the boundary
@@ -119,9 +158,15 @@ The alternative, per-engineer API calls, means n Salesforce queries per routing 
 
 ## What I'd do differently
 
-The biggest change would be starting with the real Salesforce API payload shapes rather than designing the domain in isolation. Inspecting actual payloads from the start would have grounded field names, status values, and relationships in reality rather than assumption — and would have avoided several renaming passes mid-build.
+**Start with real Salesforce payload shapes.** I designed the domain in isolation, then discovered that actual Salesforce field names and status values didn't match my assumptions. Several renaming passes mid-build would have been avoided by inspecting real payloads before writing a single class.
 
-The project was also designed to demonstrate specific OOP patterns intentionally, which occasionally meant applying a pattern because it was on the learning plan rather than because it was the clearest solution. A production codebase should let design emerge from the problem. That said, applying each pattern deliberately built the muscle memory to reach for the right tool instinctively in future.
+**Extract observer registration from `Ticket`.** `Ticket` holds its own `_severity_callbacks` list, which mixes data model with event infrastructure. I'd extract a separate `EventBus` that `Ticket` publishes to. That keeps `Ticket` a pure data object and the event wiring explicit and testable on its own.
+
+**Stop the `"-"` sentinel from leaking into the domain.** `from_salesforce_payload` checks for `"-"` to detect absent severity — that's Salesforce's null representation bleeding into the domain layer. The `SalesforceTicketPayload` TypedDict should carry `severity: str | None` and handle the sentinel at the boundary, so nothing below it ever sees `"-"`.
+
+**Add an integration test.** Unit tests cover each class in isolation, but there's no test that walks the full flow: payload arrives → `Ticket.from_salesforce_payload()` → `RoutingEngine.assign()` → observer fires → `TicketRepository.save()`. That end-to-end test would catch integration bugs that unit tests structurally cannot.
+
+**Let patterns emerge rather than applying them deliberately.** Some design choices here — notably the Observer on `Ticket` — were made because they were on the learning plan, not because the problem demanded them. A production codebase should reach for a pattern when it solves a real pain point, not to demonstrate it.
 
 ---
 
@@ -139,24 +184,31 @@ The project was also designed to demonstrate specific OOP patterns intentionally
 
 ## Getting started
 
+**Requirements:** Python 3.12+, [uv](https://docs.astral.sh/uv/)
+
 ```bash
+git clone https://github.com/brycepaquette/celonis-support-utils
+cd celonis-support-utils
+
 # Install uv if you don't have it
 curl -LsSf https://astral.sh/uv/install.sh | sh
 
-# Install dependencies
 uv sync --all-extras
 
-# Run tests
-uv run pytest
+uv run pytest                                        # run tests
+uv run pytest --cov=src --cov-report=term-missing   # with coverage
+uv run mypy src/ --strict                            # type checking
+uv run ruff check .                                  # linting
+```
 
-# Run tests with coverage
-uv run pytest --cov=src --cov-report=term-missing
+## CLI
 
-# Type check (strict)
-uv run mypy src/ --strict
+```bash
+# Route a ticket using the default (standard) strategy
+sca route TICKET-123
 
-# Lint
-uv run ruff check .
+# Route a ticket using the escalation strategy
+sca route TICKET-123 --strategy escalation
 ```
 
 ---

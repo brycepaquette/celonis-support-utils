@@ -48,8 +48,8 @@ class Ticket:
         region: str,
         service_level: str,
         status: str,
-        assignee: str,
         customer_id: str,
+        assignee: str | None = None,
     ):
         self._severity_callbacks: list[
             Callable[[Severity | None, Severity | None], None]
@@ -66,7 +66,7 @@ class Ticket:
         self.region = parse_region(region)
         self.service_level = self._parse_service_level(service_level)
         self.status = self._parse_ticket_status(status)
-        self.assignee = require_non_empty(assignee, "assignee")
+        self.assignee = assignee
         self.customer_id = require_non_empty(customer_id, "customer_id")
 
     def __repr__(self) -> str:
