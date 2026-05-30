@@ -113,7 +113,7 @@ class Ticket:
             region=payload["region"],
             service_level=payload["service_level"],
             status=payload["status"],
-            assignee=payload["assignee"],
+            assignee=payload["assignee"] or None,
             customer_id=payload["customer_id"],
         )
 

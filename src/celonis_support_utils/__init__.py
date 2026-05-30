@@ -3,6 +3,7 @@ from .engineer import Engineer
 from .enums import DayOfWeek, Region, ServiceLevel
 from .exceptions import NoAvailableEngineerError
 from .notification_sender import NotificationSender, SlackSender
+from .payloads import SalesforceCustomerPayload, SalesforceTicketPayload
 from .queue import Queue
 from .repository import (
     InMemoryTicketRepository,
@@ -18,27 +19,32 @@ from .routing_strategy import (
 )
 from .shift import Shift
 from .team import Team
-from .ticket import Ticket
+from .ticket import IssueType, Severity, Ticket, TicketStatus
 
 __all__ = [
     "Customer",
-    "ServiceLevel",
-    "Engineer",
     "DayOfWeek",
-    "Region",
-    "Queue",
+    "Engineer",
     "EscalationRouting",
-    "RoutingStrategy",
-    "StandardRouting",
-    "Shift",
-    "Team",
-    "Ticket",
+    "FallbackRouting",
+    "InMemoryTicketRepository",
+    "IssueType",
     "NoAvailableEngineerError",
     "NotificationSender",
-    "SlackSender",
-    "TicketRepository",
-    "SalesforceTicketRepository",
-    "InMemoryTicketRepository",
+    "Queue",
+    "Region",
     "RoutingEngine",
-    "FallbackRouting",
+    "RoutingStrategy",
+    "SalesforceCustomerPayload",
+    "SalesforceTicketPayload",
+    "SalesforceTicketRepository",
+    "ServiceLevel",
+    "Severity",
+    "Shift",
+    "SlackSender",
+    "StandardRouting",
+    "Team",
+    "Ticket",
+    "TicketRepository",
+    "TicketStatus",
 ]

@@ -71,7 +71,6 @@ def main(argv: list[str] | None = None) -> int:
 
     if args.command == "route":
         print(f"Routing ticket {args.ticket_id} using {args.strategy} strategy")
-        # Add the logic to route the ticket based on the provided arguments
         teams = _build_sample_teams()
         ticket = _build_sample_ticket(args.ticket_id)
         strategies: dict[str, RoutingStrategy] = {
@@ -79,8 +78,15 @@ def main(argv: list[str] | None = None) -> int:
             "escalation": EscalationRouting(),
         }
         engine = RoutingEngine(
-            strategy=strategies[f"{args.strategy}"], repo=InMemoryTicketRepository()
-        )  # Repository is not used in this example
-        assignee = engine.assign(ticket, teams)
-        print(f"Assigned ticket {ticket.ticket_id} to engineer {assignee.name}")
+            strategy=strategies[args.strategy], repo=InMemoryTicketRepository()
+        )
+        try:
+            assignee = engine.assign(ticket, teams)
+            print(f"Assigned ticket {ticket.ticket_id} to engineer {assignee.name}")
+        except NotImplementedError:
+            print(
+                "escalation routing requires on-call schedule "
+                "integration and is not yet implemented"
+            )
+            return 1
     return 0
