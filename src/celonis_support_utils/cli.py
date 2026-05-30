@@ -13,7 +13,6 @@ def build_parser() -> ArgumentParser:
     parser = ArgumentParser(description="Celonis Support Utils")
     subparsers = parser.add_subparsers(dest="command", required=True)
 
-    # Subparser for the "route" command
     route_parser = subparsers.add_parser("route", help="Route a Celonis ticket")
     route_parser.add_argument(
         "ticket_id",
