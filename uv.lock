@@ -45,7 +45,7 @@ wheels = [
 ]
 
 [[package]]
-name = "celonis-support-utils"
+name = "smart-ticket-assignment"
 version = "0.1.0"
 source = { editable = "." }
 dependencies = [

@@ -1,7 +1,7 @@
-# celonis-support-utils
+# Smart Ticket Assignment
 
-[![CI](https://github.com/brycepaquette/celonis-support-utils/actions/workflows/ci.yml/badge.svg)](https://github.com/brycepaquette/celonis-support-utils/actions/workflows/ci.yml)
-[![codecov](https://codecov.io/github/brycepaquette/celonis-support-utils/graph/badge.svg?token=11TCPU5EY2)](https://codecov.io/github/brycepaquette/celonis-support-utils)
+[![CI](https://github.com/brycepaquette/smart-ticket-assignment/actions/workflows/ci.yml/badge.svg)](https://github.com/brycepaquette/smart-ticket-assignment/actions/workflows/ci.yml)
+[![codecov](https://codecov.io/github/brycepaquette/smart-ticket-assignment/graph/badge.svg?token=11TCPU5EY2)](https://codecov.io/github/brycepaquette/smart-ticket-assignment)
 
 A Python package implementing a customer support ticket routing domain, built as a deliberate exercise in object-oriented design, type safety, and production-grade Python project structure.
 
@@ -187,8 +187,8 @@ The alternative, per-engineer API calls, means n Salesforce queries per routing 
 **Requirements:** Python 3.12+, [uv](https://docs.astral.sh/uv/)
 
 ```bash
-git clone https://github.com/brycepaquette/celonis-support-utils
-cd celonis-support-utils
+git clone https://github.com/brycepaquette/smart-ticket-assignment
+cd smart-ticket-assignment
 
 # Install uv if you don't have it
 curl -LsSf https://astral.sh/uv/install.sh | sh
